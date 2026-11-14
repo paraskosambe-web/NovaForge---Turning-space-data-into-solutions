@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Activity, BookOpen, ChartNoAxesCombined, ChevronRight, CircleHelp, Flame, FlaskConical, GitCompareArrows, Home, Library, MoreHorizontal, Radio, ShieldAlert, Sparkles } from "lucide-react";
 import { useEffect, useRef, type ReactNode } from "react";
+import { SpacePreloader } from "@/components/space-preloader";
 
 const nav = [
   { label: "Overview", href: "/", icon: Home },
@@ -35,6 +36,7 @@ export function AppShell({ children }: { children: ReactNode }) {
   }, [path]);
 
   return <div className="app-frame">
+    <SpacePreloader />
     <a className="skip-link" href="#main-content">Skip to content</a>
     <aside className="sidebar" aria-label="Primary navigation">
       <Link href="/" className="brand-lockup" aria-label="NovaForge home"><span className="brand-mark"><Flame size={19} /></span><span><strong>NOVAFORGE</strong><small>SPACE FIRE INTELLIGENCE</small></span></Link>

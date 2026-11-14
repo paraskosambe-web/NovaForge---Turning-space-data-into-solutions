@@ -1,0 +1,212 @@
+/* Layout refinements for phones and tablets. */
+.explorer-mobile-list,
+.gap-mobile-list,
+.compare-mobile-list,
+.detail-mobile-records { display: none; }
+
+@media (min-width: 761px) and (max-width: 1050px) {
+  .explorer-desktop-table,.gap-table-desktop,.detail-table-desktop { display: none !important; }
+  .explorer-mobile-list,.gap-mobile-list,.detail-mobile-records { display: grid; gap: 9px; }
+  .compare-mobile-list { display: grid; gap: 9px; }
+  .compare-matrix-scroll { display: none; }
+
+  .explorer-mobile-card,.gap-mobile-card,.compare-mobile-card,.detail-mobile-record {
+    min-width: 0; padding: 13px; border: 1px solid #293752; border-radius: 10px; background: rgba(8,16,28,.7);
+  }
+  .explorer-mobile-heading,.gap-mobile-heading,.compare-mobile-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+  .explorer-mobile-heading > a:first-child,.gap-mobile-heading > a:first-child { display: grid; gap: 3px; min-width: 0; }
+  .explorer-mobile-heading strong,.gap-mobile-heading strong,.compare-mobile-heading strong { color: #e5edf9; font-size: 12px; }
+  .explorer-mobile-title { margin: 5px 0 9px; color: #8492aa; font-size: 10px; line-height: 1.45; }
+  .explorer-mobile-values,.gap-mobile-fields,.compare-mobile-values { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 8px; margin-top: 10px; }
+  .explorer-mobile-values > div,.gap-mobile-fields > div,.compare-mobile-values > div { display: grid; align-content: start; gap: 4px; min-width: 0; }
+  .explorer-mobile-values > div > span:first-child,.gap-mobile-fields > div > span:first-child,.compare-mobile-values > div > span:first-child { color: #8795ad; font-size: 9px; }
+  .explorer-mobile-values .value-wrap,.gap-mobile-fields .value-wrap,.compare-mobile-values .value-wrap { min-width: 0; }
+  .explorer-mobile-values .value-pill,.gap-mobile-fields .value-pill,.compare-mobile-values .value-pill { max-width: 100%; flex-wrap: wrap; font-size: 9px; }
+  .gap-mobile-card > p { display: flex; flex-wrap: wrap; align-items: center; gap: 5px; margin: 9px 0 0; color: #9aa7bd; font-size: 10px; }
+  .compare-mobile-line { display: grid; grid-template-columns: 96px minmax(0,1fr); gap: 8px; padding: 8px 0; border-top: 1px solid #24304a; }
+  .compare-mobile-line > span { color: #8795ad; font-size: 9px; }
+  .compare-mobile-line > p { min-width: 0; margin: 0; color: #becadd; font-size: 10px; line-height: 1.5; overflow-wrap: anywhere; }
+  .compare-mobile-heading { align-items: center; justify-content: flex-start; }
+  .compare-mobile-heading .source-link { margin-left: auto; }
+  .detail-mobile-record-head { display: grid; gap: 4px; margin-bottom: 8px; }
+  .detail-mobile-record-head strong { color: #dfe8f6; font: 9px var(--font-jetbrains-mono),monospace; overflow-wrap: anywhere; }
+  .detail-mobile-record-head span { color: #8492a9; font-size: 9px; }
+  .detail-mobile-record > .source-link { margin-top: 8px; }
+
+  .reference-row { display: grid; grid-template-columns: 8px minmax(0,1fr); align-items: start; gap: 7px 9px; padding: 10px; border: 1px solid #263550; border-radius: 9px; background: rgba(8,16,28,.5); }
+  .reference-dot { grid-column: 1; grid-row: 1; margin-top: 4px; }
+  .reference-title,.reference-values,.reference-row > .source-link { grid-column: 2; }
+  .reference-title { font-size: 10px; }
+  .reference-values { display: grid; grid-template-columns: minmax(0,1fr); gap: 6px; }
+  .reference-value { display: grid; grid-template-columns: minmax(105px,.8fr) minmax(0,1.2fr); align-items: center; gap: 7px; min-width: 0; }
+  .reference-value > span:first-child { color: #8795ad; font-size: 9px; }
+  .reference-value .value-wrap,.reference-value .value-pill { min-width: 0; max-width: 100%; }
+  .reference-value .value-pill { flex-wrap: wrap; font-size: 9px; }
+  .reference-row .value-source { display: none !important; }
+  .reference-row > .source-link { width: fit-content; }
+
+  .score-pair { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .score-pair .value-wrap,.score-pair .value-pill { min-width: 0; max-width: 100%; }
+  .score-pair .value-pill { flex-wrap: wrap; font-size: 9px; }
+  .page-title-row { gap: 14px; }
+  .panel-head { gap: 12px; }
+
+  /* Tablet-sized text in the source stylesheet was too small for touch use. */
+  .panel-head p,.callout,.prose,.context-card p,.gap-stat p,.application-card > p,.application-mini p,
+  .safety-heading p:last-child,.methodology-score-cards .panel > p,.check-list,.detail-line > strong,
+  .detail-line > span,.compare-mobile-line > span,.filter-summary,.bottom-note { font-size: 12px; line-height: 1.55; }
+  .source-link,.source-register .source-link,.timeline-content .source-link { font-size: 11px; }
+  .tag { min-height: 25px; font-size: 10px; }
+  .value-kind { padding: 2px 4px; font-size: 8px; }
+  .record-id { font-size: 10px; }
+  .card-title-sub { font-size: 11px; }
+  .card-objective { font-size: 12px; line-height: 1.55; }
+  .score-label { font-size: 10px; }
+  .detail-link { font-size: 11px; }
+  .hardware-group-head strong { font-size: 11px; }
+  .hardware-group-head small { font-size: 10px; }
+  .hardware-records .tag { font-size: 9px; }
+  .timeline-date { font-size: 10px; }
+  .timeline-content strong { font-size: 12px; }
+  .timeline-content > span { font-size: 11px; }
+  .equation-box code,.weight-name strong,.snapshot-row,.value-type-list > div { font-size: 11px; }
+  .equation-box small,.weight-name small,.snapshot-metrics > div > span { font-size: 10px; }
+  .application-card h2 { font-size: 17px; }
+  .application-mini strong,.incident-card strong { font-size: 12px; }
+  .incident-card small { font-size: 10px; }
+}
+
+@media (max-width: 760px) {
+  /* Keep the fixed tab bar outside the scroll area so it never covers page content. */
+  .app-frame { height: 100vh; height: 100dvh; min-height: 0; overflow: hidden; }
+  .main-column {
+    height: calc(100vh - 65px);
+    height: calc(100dvh - 65px - env(safe-area-inset-bottom, 0px));
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior-y: contain;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 0;
+  }
+  .sidebar { height: calc(65px + env(safe-area-inset-bottom, 0px)); }
+
+  /* Six slots fit the bottom bar; More stays in the bar and opens above it. */
+  .sidebar { flex-direction: row; align-items: stretch; }
+  .sidebar .nav-list { width: calc(100% - 49px); height: auto; flex: 1 1 auto; min-height: 0; }
+  .sidebar .mobile-more { width: 49px; height: 100%; flex: 0 0 49px; align-self: stretch; }
+  .mobile-more summary { width: 100%; height: 100%; min-height: 50px; }
+  .mobile-more.has-active summary { color: #fff0e7; box-shadow: inset 0 2px var(--flame); }
+
+  .filter-grid { grid-template-columns: minmax(0,1fr); }
+  .filter-grid > :first-child { grid-column: auto; }
+  .field-input,.field-select { min-height: 44px; }
+  .button { min-height: 44px; }
+  .score-pair { grid-template-columns: minmax(0,1fr); }
+  .score-pair > div { min-width: 0; }
+  .score-pair .value-wrap,.score-pair .value-pill { max-width: 100%; }
+  .score-pair .value-pill { flex-wrap: wrap; font-size: 10px; }
+  .value-pill { gap: 4px; padding: 4px 6px; font-size: 10px; }
+  .value-kind { padding: 1px 3px; font-size: 7px; }
+
+  .explorer-desktop-table,.gap-table-desktop,.detail-table-desktop { display: none !important; }
+  .explorer-mobile-list,.gap-mobile-list,.detail-mobile-records { display: grid; gap: 9px; }
+  .compare-mobile-list { display: grid; gap: 9px; }
+  .compare-matrix-scroll { display: none; }
+  .explorer-mobile-card,.gap-mobile-card,.compare-mobile-card,.detail-mobile-record {
+    min-width: 0; padding: 12px; border: 1px solid #293752; border-radius: 10px; background: rgba(8,16,28,.7);
+  }
+  .explorer-mobile-heading,.gap-mobile-heading,.compare-mobile-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 7px; flex-wrap: wrap; }
+  .explorer-mobile-heading > a:first-child,.gap-mobile-heading > a:first-child { display: grid; gap: 3px; min-width: 0; }
+  .explorer-mobile-heading strong,.gap-mobile-heading strong,.compare-mobile-heading strong { color: #e5edf9; font-size: 12px; }
+  .explorer-mobile-title { margin: 5px 0 9px; color: #8492aa; font-size: 10px; line-height: 1.45; }
+  .explorer-mobile-values,.gap-mobile-fields,.compare-mobile-values { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 8px; margin-top: 10px; }
+  .explorer-mobile-values > div,.gap-mobile-fields > div,.compare-mobile-values > div { display: grid; align-content: start; gap: 4px; min-width: 0; }
+  .explorer-mobile-values > div > span:first-child,.gap-mobile-fields > div > span:first-child,.compare-mobile-values > div > span:first-child { color: #8795ad; font-size: 9px; }
+  .explorer-mobile-values .value-wrap,.gap-mobile-fields .value-wrap,.compare-mobile-values .value-wrap { min-width: 0; }
+  .explorer-mobile-values .value-pill,.gap-mobile-fields .value-pill,.compare-mobile-values .value-pill { max-width: 100%; flex-wrap: wrap; font-size: 9px; }
+  .gap-mobile-card > p { display: flex; flex-wrap: wrap; align-items: center; gap: 5px; margin: 9px 0 0; color: #9aa7bd; font-size: 10px; }
+  .compare-mobile-line { display: grid; grid-template-columns: 92px minmax(0,1fr); gap: 8px; padding: 8px 0; border-top: 1px solid #24304a; }
+  .compare-mobile-line > span { color: #8795ad; font-size: 9px; }
+  .compare-mobile-line > p { min-width: 0; margin: 0; color: #becadd; font-size: 10px; line-height: 1.5; overflow-wrap: anywhere; }
+  .compare-mobile-heading { align-items: center; justify-content: flex-start; }
+  .compare-mobile-heading .source-link { margin-left: auto; }
+  .detail-mobile-record-head { display: grid; gap: 4px; margin-bottom: 8px; }
+  .detail-mobile-record-head strong { color: #dfe8f6; font: 9px var(--font-jetbrains-mono),monospace; overflow-wrap: anywhere; }
+  .detail-mobile-record-head span { color: #8492a9; font-size: 9px; }
+  .detail-mobile-record > .source-link { margin-top: 8px; }
+
+  .reference-row { display: grid; grid-template-columns: 8px minmax(0,1fr); align-items: start; gap: 7px 9px; padding: 10px; border: 1px solid #263550; border-radius: 9px; background: rgba(8,16,28,.5); }
+  .reference-dot { grid-column: 1; grid-row: 1; margin-top: 4px; }
+  .reference-title,.reference-values,.reference-row > .source-link { grid-column: 2; }
+  .reference-title { font-size: 10px; }
+  .reference-values { display: grid; grid-template-columns: minmax(0,1fr); gap: 6px; }
+  .reference-value { display: grid; grid-template-columns: minmax(105px,.8fr) minmax(0,1.2fr); align-items: center; gap: 7px; min-width: 0; }
+  .reference-value > span:first-child { color: #8795ad; font-size: 9px; }
+  .reference-value .value-wrap,.reference-value .value-pill { min-width: 0; max-width: 100%; }
+  .reference-value .value-pill { flex-wrap: wrap; font-size: 9px; }
+  .reference-row .value-source { display: none !important; }
+  .reference-row > .source-link { width: fit-content; }
+
+  .compare-select-grid { max-height: 380px; }
+  .compare-choice { min-height: 46px; }
+  .compare-condition-card { min-width: 100%; }
+  .chat-toolbar { align-items: flex-start; flex-direction: column; }
+  .audience-toggle button { min-height: 38px; }
+  .suggestion-list button { min-height: 44px; }
+  .chat-form { align-items: stretch; flex-direction: column; }
+  .chat-form .button { align-self: flex-end; }
+  .weight-row { grid-template-columns: minmax(0,1fr) 54px; gap: 8px; }
+  .weight-name { grid-column: 1 / -1; }
+  .timeline-item { grid-template-columns: 1fr; gap: 3px; padding-left: 16px; }
+  .timeline-date { font-size: 9px; }
+  .timeline-date br { display: none; }
+  .page-intro { font-size: 14px; }
+  .fine-print { font-size: 11px; line-height: 1.45; }
+  .prose { font-size: 12px; }
+  .detail-line { grid-template-columns: 94px minmax(0,1fr); gap: 7px; }
+  .detail-line > span { font-size: 10px; }
+  .source-list li { font-size: 11px; }
+  .table-scroll { overscroll-behavior-x: contain; -webkit-overflow-scrolling: touch; }
+
+  /* Bring dense dashboard copy up to readable phone sizes. */
+  .nav-item { font-size: 9px; }
+  .mobile-more summary { font-size: 9px; }
+  .panel-head p,.callout,.prose,.context-card p,.gap-stat p,.application-card > p,.application-mini p,
+  .safety-heading p:last-child,.methodology-score-cards .panel > p,.check-list,.detail-line > strong,
+  .detail-line > span,.compare-mobile-line > span,.filter-summary,.bottom-note { font-size: 12px; line-height: 1.55; }
+  .source-link,.source-register .source-link,.timeline-content .source-link { font-size: 11px; }
+  .tag { min-height: 25px; font-size: 10px; }
+  .value-kind { padding: 2px 4px; font-size: 8px; }
+  .record-id { font-size: 10px; }
+  .card-title-sub { font-size: 11px; }
+  .card-objective { font-size: 12px; line-height: 1.55; }
+  .score-label { font-size: 10px; }
+  .detail-link { font-size: 11px; }
+  .explorer-mobile-heading strong,.gap-mobile-heading strong,.compare-mobile-heading strong { font-size: 13px; }
+  .explorer-mobile-title { font-size: 11px; }
+  .explorer-mobile-values > div > span:first-child,.gap-mobile-fields > div > span:first-child,
+  .compare-mobile-values > div > span:first-child { font-size: 10px; }
+  .compare-mobile-line > p { font-size: 11px; }
+  .detail-mobile-record-head strong,.detail-mobile-record-head span { font-size: 10px; }
+  .compare-choice strong { font-size: 11px; }
+  .compare-choice small { font-size: 10px; }
+  .hardware-group-head strong { font-size: 11px; }
+  .hardware-group-head small { font-size: 10px; }
+  .hardware-records .tag { font-size: 9px; }
+  .timeline-date { font-size: 10px; }
+  .timeline-content strong { font-size: 12px; }
+  .timeline-content > span { font-size: 11px; }
+  .equation-box code,.weight-name strong,.snapshot-row,.value-type-list > div { font-size: 11px; }
+  .equation-box small,.weight-name small,.snapshot-metrics > div > span { font-size: 10px; }
+  .application-card h2 { font-size: 17px; }
+  .application-mini strong,.incident-card strong { font-size: 12px; }
+  .incident-card small { font-size: 10px; }
+  .source-list li { font-size: 12px; }
+  .chart-wrap { height: 210px; min-height: 210px; }
+  .chart-empty-overlay span { font-size: 10px; }
+  .chart-empty-overlay small { font-size: 11px; }
+  .chart-foot { font-size: 11px; }
+  .chart-empty-inline { min-height: 100px; flex-wrap: wrap; font-size: 12px; }
+  .hardware-orbit { min-height: 0; }
+  .timeline-list { max-height: none; }
+}

@@ -40,7 +40,13 @@ export function DetailView({ item, all }: { item: Investigation; all: Investigat
     {item.experimental_records.length > 0 && <>
       <div className="section-label"><h2>Accessible experimental table</h2><span className="fine-print">One real PSI table was retrievable in this snapshot.</span></div>
       <div className="grid grid-2"><EFieldTableChart items={[item]} /><Panel title="PSI table rows" note="Fuel concentration and ignition count are reported by the source. Neither is a material-safety verdict.">
-        <div className="table-scroll nested-table"><table className="data-table"><thead><tr><th>Record</th><th>Fuel</th><th>Fuel concentration</th><th>Flames ignited</th></tr></thead><tbody>{item.experimental_records.slice(0, 8).map((row) => <tr key={row.record_id}><td><span className="record-id">{row.record_id}</span><small>{row.test_date} · {row.label}</small></td><td>{row.fuel ?? "Not reported"}</td><td><ValueBadge field={row.values.fuel_concentration_pct} compact /></td><td><ValueBadge field={row.values.flames_ignited} compact /></td></tr>)}</tbody></table></div>
+        <div className="table-scroll nested-table detail-table-desktop"><table className="data-table"><thead><tr><th>Record</th><th>Fuel</th><th>Fuel concentration</th><th>Flames ignited</th></tr></thead><tbody>{item.experimental_records.slice(0, 8).map((row) => <tr key={row.record_id}><td><span className="record-id">{row.record_id}</span><small>{row.test_date} · {row.label}</small></td><td>{row.fuel ?? "Not reported"}</td><td><ValueBadge field={row.values.fuel_concentration_pct} compact /></td><td><ValueBadge field={row.values.flames_ignited} compact /></td></tr>)}</tbody></table></div>
+        <div className="detail-mobile-records">{item.experimental_records.slice(0, 8).map((row) => <article className="detail-mobile-record" key={row.record_id}>
+          <div className="detail-mobile-record-head"><strong>{row.record_id}</strong><span>{row.test_date} · {row.label}</span></div>
+          <div className="compare-mobile-line"><span>Fuel</span><p>{row.fuel ?? "Not reported"}</p></div>
+          <div className="compare-mobile-values"><div><span>Fuel concentration</span><ValueBadge field={row.values.fuel_concentration_pct} compact showSource={false} /></div><div><span>Flames ignited</span><ValueBadge field={row.values.flames_ignited} compact showSource={false} /></div></div>
+          <SourceLink href={row.source_url} label="Source row" />
+        </article>)}</div>
         <p className="fine-print table-note">Showing the first rows from the downloaded PSI CSV; the complete file is in <code>data/raw/PSI-22-experimental-table.csv</code>.</p>
       </Panel></div>
     </>}

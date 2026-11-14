@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { AppShell } from "@/components/app-shell";
 import "./globals.css";
+import "./responsive.css";
 
 export const metadata: Metadata = {
   title: "NovaForge · Flame in Freefall",

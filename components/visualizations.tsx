@@ -36,7 +36,16 @@ export function PpO2PressureChart() {
       <CartesianGrid stroke={grid} strokeDasharray="3 4" /><XAxis type="number" dataKey="x" domain={[0, 16]} tick={axis} label={{ value: "Total pressure (psi)", position: "insideBottom", offset: -12, fill: "#8b99b2", fontSize: 10 }} /><YAxis type="number" dataKey="y" domain={[0, 5]} tick={axis} label={{ value: "Calculated ppO₂ (psi)", angle: -90, position: "insideLeft", fill: "#8b99b2", fontSize: 10 }} /><Tooltip formatter={(value: number) => [`${value.toFixed(2)} psi`, "Reference value"]} />
       {points.map((point) => <Scatter key={point.name} name={point.name} data={[point]} fill={point.color} shape="diamond" />)}
     </ScatterChart></ResponsiveContainer></div>
-    <div className="reference-list">{REFERENCE_SCENARIOS.map((scenario, index) => <div className="reference-row" key={scenario.id}><span className="reference-dot" style={{ background: colors[index] }} /><span>{scenario.name}</span><ValueBadge field={scenario.oxygen_concentration_pct} compact /><ValueBadge field={scenario.total_pressure_psi} compact /><ValueBadge field={scenario.oxygen_partial_pressure_psi} compact /></div>)}</div>
+    <div className="reference-list">{REFERENCE_SCENARIOS.map((scenario, index) => <div className="reference-row" key={scenario.id}>
+      <span className="reference-dot" style={{ background: colors[index] }} />
+      <strong className="reference-title">{scenario.name}</strong>
+      <div className="reference-values">
+        <div className="reference-value"><span>O₂ concentration</span><ValueBadge field={scenario.oxygen_concentration_pct} compact showSource={false} /></div>
+        <div className="reference-value"><span>Total pressure</span><ValueBadge field={scenario.total_pressure_psi} compact showSource={false} /></div>
+        <div className="reference-value"><span>Calculated ppO₂</span><ValueBadge field={scenario.oxygen_partial_pressure_psi} compact showSource={false} /></div>
+      </div>
+      <SourceLink href={scenario.oxygen_concentration_pct.source_url} label="Challenge source" />
+    </div>)}</div>
   </Panel>;
 }
 

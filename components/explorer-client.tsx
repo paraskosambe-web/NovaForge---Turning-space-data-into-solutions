@@ -66,9 +66,17 @@ export function ExplorerClient({ items }: { items: Investigation[] }) {
       </div>
       <div className="filter-summary"><span><SlidersHorizontal size={13} /> Showing {filtered.length} investigation records</span><span>Structured O₂ / pressure / airflow: {structuredCount} of {items.length} <SourceLink href={SOURCES.psi.url} label="PSI source" /></span></div>
     </Panel>
-    <div className="table-scroll panel"><table className="data-table"><thead>{table.getHeaderGroups().map((group) => <tr key={group.id}>{group.headers.map((header) => <th key={header.id}>{flexRender(header.column.columnDef.header, header.getContext())}</th>)}</tr>)}</thead><tbody>
+    <div className="table-scroll panel explorer-desktop-table"><table className="data-table"><thead>{table.getHeaderGroups().map((group) => <tr key={group.id}>{group.headers.map((header) => <th key={header.id}>{flexRender(header.column.columnDef.header, header.getContext())}</th>)}</tr>)}</thead><tbody>
       {table.getRowModel().rows.map((row) => <tr key={row.id}>{row.getVisibleCells().map((cell) => <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>)}</tr>)}
     </tbody></table>{!filtered.length && <div className="empty-state"><h3>No records match</h3><p>Try removing numeric limits. The current PSI search snapshot has no structured O₂, pressure or airflow values.</p></div>}</div>
+    <div className="explorer-mobile-list" aria-label="Investigation results">
+      {filtered.length ? filtered.map((item) => <article className="explorer-mobile-card" key={item.id}>
+        <div className="explorer-mobile-heading"><Link href={`/investigations/${item.id}`}><span className="record-id">{item.id}</span><strong>{item.acronym || item.title}</strong><ArrowUpRight size={13} /></Link><SourceLink href={item.source_url} label="PSI source" /></div>
+        <p className="explorer-mobile-title">{item.title}</p>
+        <div className="tag-row">{item.fuel_types.map((value) => <Pill key={value}>{value}</Pill>)}{item.safety_categories.map((value) => <Pill key={value} tone={value === "detection" ? "green" : value === "suppression" ? "ice" : "flame"}>{categoryLabels[value]}</Pill>)}</div>
+        <div className="explorer-mobile-values"><div><span>O₂ concentration</span><ValueBadge field={item.conditions.oxygen_concentration_pct} compact showSource={false} /></div><div><span>Total pressure</span><ValueBadge field={item.conditions.total_pressure_psi} compact showSource={false} /></div><div><span>Airflow</span><ValueBadge field={item.conditions.airflow_m_s} compact showSource={false} /></div></div>
+      </article>) : <div className="empty-state"><h3>No records match</h3><p>Try removing filters or numeric limits that need unavailable test conditions.</p></div>}
+    </div>
     <p className="fine-print explorer-foot">Classification chips are inferred from each PSI summary and the official challenge brief. They are navigation aids, not NASA-defined hazard labels.</p>
   </>;
 }

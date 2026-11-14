@@ -80,8 +80,8 @@ export function scoreInvestigation(item: Investigation, environment: Environment
   const evidenceValue = availableWeight ? matchedWeight / availableWeight : null;
   return {
     id: item.id,
-    evidence: valueField(evidenceValue, item.source_url, "documented match points / 100", evidenceValue === null ? "Unavailable: no target and source-recorded numeric condition pair could be compared." : "Calculated from only available, targetable experimental conditions; missing fields are not treated as mismatches.", evidenceValue === null),
-    inferred: valueField(inferredScore, item.source_url, "inferred relevance points / 100", "Inference from topic, platform, disclosed fuel class and hardware presence; not an experimental result."),
+    evidence: valueField(evidenceValue, item.source_url, "points / 100", evidenceValue === null ? "Unavailable: no target and source-recorded numeric condition pair could be compared." : "Calculated from only available, targetable experimental conditions; missing fields are not treated as mismatches.", evidenceValue === null),
+    inferred: valueField(inferredScore, item.source_url, "points / 100", "Inference from topic, platform, disclosed fuel class and hardware presence; not an experimental result."),
     evidenceBreakdown,
     inferredBreakdown: Object.entries(infer).map(([key, score]) => ({ key, score: valueField(score, item.source_url, "inferred points / 100", "Reasoned relevance from source metadata."), weight_pct: weights[key as keyof InferenceWeights] })),
     environment_note: ENVIRONMENTS.find((entry) => entry.id === environment)?.note ?? "",

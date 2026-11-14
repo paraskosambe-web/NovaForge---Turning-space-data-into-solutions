@@ -9,7 +9,7 @@ import { SOURCES } from "@/lib/sources";
 
 const missingFields = ["O₂ concentration", "Total pressure", "ppO₂", "Airflow"];
 function missingField(value: number, id: string, url: string): NumericValue {
-  return { value, unit: "condition fields", type: "calculated", source_url: url, investigation_id: id, note: "Count of required structured condition fields marked unavailable in this PSI summary." };
+  return { value, unit: "fields unavailable", type: "calculated", source_url: url, investigation_id: id, note: "Count of required structured condition fields marked unavailable in this PSI summary." };
 }
 
 export default function DataGapsPage() {
@@ -25,7 +25,17 @@ export default function DataGapsPage() {
       <div className="callout"><Waves size={15} /><span>NASA describes E-FIELD as applying voltage to flame-generated ions. A prior NASA paper discusses tuning ion-driven convection as a gravity-convection equivalent; this is a mechanism analogy, not a direct lunar- or Mars-gravity test. <SourceLink href={SOURCES.eField.url} label="E-FIELD experiment" /> <SourceLink href={SOURCES.electricFieldGravity.url} label="NASA NTRS mechanism paper" /></span></div>
     </Panel>
     <Panel title="Missing condition fields by investigation" note="Each absent value remains type-badged and source-linked in the record detail and API export.">
-      <div className="table-scroll"><table className="data-table gap-table"><thead><tr><th>Investigation</th><th>O₂</th><th>Total pressure</th><th>ppO₂</th><th>Airflow</th><th>Missing fields</th><th>Source</th></tr></thead><tbody>{investigations.map((item) => <tr key={item.id}><td><a className="table-record-link" href={`/investigations/${item.id}`}><span className="record-id">{item.id}</span><strong>{item.acronym || item.title}</strong></a></td><td><ValueBadge field={item.conditions.oxygen_concentration_pct} compact /></td><td><ValueBadge field={item.conditions.total_pressure_psi} compact /></td><td><ValueBadge field={item.conditions.oxygen_partial_pressure_psi} compact /></td><td><ValueBadge field={item.conditions.airflow_m_s} compact /></td><td><ValueBadge field={missingField(missingFields.length, item.id, item.source_url)} compact /></td><td><SourceLink href={item.source_url} label="PSI" /></td></tr>)}</tbody></table></div>
+      <div className="table-scroll gap-table-desktop"><table className="data-table gap-table"><thead><tr><th>Investigation</th><th>O₂</th><th>Total pressure</th><th>ppO₂</th><th>Airflow</th><th>Missing fields</th><th>Source</th></tr></thead><tbody>{investigations.map((item) => <tr key={item.id}><td><a className="table-record-link" href={`/investigations/${item.id}`}><span className="record-id">{item.id}</span><strong>{item.acronym || item.title}</strong></a></td><td><ValueBadge field={item.conditions.oxygen_concentration_pct} compact /></td><td><ValueBadge field={item.conditions.total_pressure_psi} compact /></td><td><ValueBadge field={item.conditions.oxygen_partial_pressure_psi} compact /></td><td><ValueBadge field={item.conditions.airflow_m_s} compact /></td><td><ValueBadge field={missingField(missingFields.length, item.id, item.source_url)} compact /></td><td><SourceLink href={item.source_url} label="PSI" /></td></tr>)}</tbody></table></div>
+      <div className="gap-mobile-list">{investigations.map((item) => <article className="gap-mobile-card" key={item.id}>
+        <div className="gap-mobile-heading"><a href={`/investigations/${item.id}`}><span className="record-id">{item.id}</span><strong>{item.acronym || item.title}</strong></a><SourceLink href={item.source_url} label="PSI record" /></div>
+        <div className="gap-mobile-fields">
+          <div><span>O₂ concentration</span><ValueBadge field={item.conditions.oxygen_concentration_pct} compact showSource={false} /></div>
+          <div><span>Total pressure</span><ValueBadge field={item.conditions.total_pressure_psi} compact showSource={false} /></div>
+          <div><span>ppO₂</span><ValueBadge field={item.conditions.oxygen_partial_pressure_psi} compact showSource={false} /></div>
+          <div><span>Airflow</span><ValueBadge field={item.conditions.airflow_m_s} compact showSource={false} /></div>
+        </div>
+        <p><ValueBadge field={missingField(missingFields.length, item.id, item.source_url)} compact showSource={false} /></p>
+      </article>)}</div>
     </Panel>
     <Panel title="What this snapshot contains" className="gap-bottom"><div className="snapshot-row"><span><ArrowDownRight size={15} /> Investigation metadata</span><span>26 source records</span><SourceLink href={SOURCES.psi.url} label="PSI query" /></div><div className="snapshot-row"><span><ArrowDownRight size={15} /> Parsed experimental table</span><span>PSI-22 · E-FIELD Flames CSV</span><SourceLink href="https://psi.nasa.gov/physci/repo/data/investigations/PSI-22" label="PSI-22 record" /></div><p className="fine-print">The E-FIELD table contains fuel-mixture concentration and flames-ignited counts. It does not contain structured oxygen, total-pressure or airflow fields, and these entries are not interpreted as a suppression outcome.</p></Panel>
   </>;

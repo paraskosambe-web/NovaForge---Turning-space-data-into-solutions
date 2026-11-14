@@ -9,16 +9,16 @@ const visual: Record<ValueType, { label: string; className: string; Icon: typeof
   unavailable: { label: "Unavailable", className: "value-unavailable", Icon: CircleHelp },
 };
 
-export function ValueBadge({ field, compact = false }: { field: NumericValue; compact?: boolean }) {
+export function ValueBadge({ field, compact = false, showSource = true }: { field: NumericValue; compact?: boolean; showSource?: boolean }) {
   const { label, className, Icon } = visual[field.type];
-  const shown = field.value === null ? "Unavailable" : `${new Intl.NumberFormat("en-US", { maximumFractionDigits: 3 }).format(field.value)} ${field.unit}`;
+  const shown = field.value === null ? "—" : `${new Intl.NumberFormat("en-US", { maximumFractionDigits: 3 }).format(field.value)} ${field.unit}`;
   return <span className={`value-wrap ${compact ? "value-wrap-compact" : ""}`}>
-    <span className={`value-pill ${className}`} title={field.note ?? `${label} value`}>
+    <span className={`value-pill ${className}`} title={field.note ?? `${label} value`} aria-label={`${shown} · ${label}`}>
       <Icon size={13} aria-hidden="true" />
       <span className="value-text">{shown}</span>
       <span className="value-kind">{label}</span>
     </span>
-    {field.source_url && <SourceLink href={field.source_url} label={field.source_label ?? field.investigation_id ?? "Source"} className="value-source" />}
+    {showSource && field.source_url && <SourceLink href={field.source_url} label={field.source_label ?? field.investigation_id ?? "Source"} className="value-source" />}
   </span>;
 }
 

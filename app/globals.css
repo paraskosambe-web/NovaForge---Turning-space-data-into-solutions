@@ -170,6 +170,51 @@ h3 { margin-bottom: 8px; font-size: 15px; line-height: 1.35; }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; } }
 
 @media (max-width: 760px) {
+  /* Keep the fixed navigation inside its 65px bar instead of pushing More below it. */
+  .sidebar .nav-list { height: auto; flex: 1 1 auto; min-height: 0; }
+  .mobile-more { flex: 0 0 49px; align-self: stretch; }
+  .mobile-more summary { height: 100%; min-height: 50px; }
+  .nav-item { min-height: 50px; }
+
+  /* Single-column filters and score cards remain readable at phone widths. */
+  .filter-grid { grid-template-columns: minmax(0,1fr); }
+  .filter-grid > :first-child { grid-column: auto; }
+  .score-pair { grid-template-columns: minmax(0,1fr); }
+  .score-pair > div { min-width: 0; }
+  .score-pair .value-wrap,.score-pair .value-pill { max-width: 100%; }
+  .value-pill { gap: 4px; padding: 4px 6px; font-size: 10px; }
+  .value-kind { padding: 1px 3px; font-size: 7px; }
+
+  /* Stack scenario condition rows instead of squeezing three badges together. */
+  .reference-row { grid-template-columns: 8px minmax(0,1fr); align-items: start; gap: 6px 8px; padding: 10px; border: 1px solid #263550; border-radius: 9px; background: rgba(8,16,28,.5); }
+  .reference-dot { grid-column: 1; grid-row: 1; margin-top: 4px; }
+  .reference-title,.reference-values,.reference-row > .source-link { grid-column: 2; }
+  .reference-values { display: grid; grid-template-columns: minmax(0,1fr); gap: 6px; }
+  .reference-value { display: grid; grid-template-columns: minmax(95px,.8fr) minmax(0,1.2fr); align-items: center; gap: 6px; min-width: 0; }
+  .reference-value > span:first-child { color: #8290a8; font-size: 9px; }
+  .reference-value .value-wrap,.reference-value .value-pill { min-width: 0; max-width: 100%; }
+  .reference-row .value-source { display: none !important; }
+  .reference-row > .source-link { width: fit-content; }
+  .compare-condition-card .value-wrap { align-items: flex-start; }
+  .compare-condition-card .value-source { overflow-wrap: anywhere; }
+  .timeline-item { grid-template-columns: 1fr; gap: 3px; padding-left: 16px; }
+  .timeline-date { font-size: 9px; }
+  .timeline-date br { display: none; }
+  .timeline-content { padding-left: 0; }
+}
+
+@media (min-width: 761px) and (max-width: 1050px) {
+  .reference-row { grid-template-columns: 8px minmax(0,1fr); align-items: start; gap: 6px 8px; padding: 9px; border: 1px solid #263550; border-radius: 9px; background: rgba(8,16,28,.5); }
+  .reference-dot { grid-column: 1; grid-row: 1; margin-top: 4px; }
+  .reference-title,.reference-values,.reference-row > .source-link { grid-column: 2; }
+  .reference-values { display: grid; grid-template-columns: minmax(0,1fr); gap: 5px; }
+  .reference-value { display: grid; grid-template-columns: minmax(90px,.8fr) minmax(0,1.2fr); align-items: center; gap: 6px; min-width: 0; }
+  .reference-value > span:first-child { color: #8290a8; font-size: 8px; }
+  .reference-value .value-wrap,.reference-value .value-pill { min-width: 0; max-width: 100%; }
+  .reference-row .value-source { display: none !important; }
+}
+
+@media (max-width: 760px) {
   .button { min-height: 44px; }
   .field-input,.field-select { min-height: 44px; }
   .audience-toggle button { min-height: 36px; }

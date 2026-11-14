@@ -31,6 +31,15 @@ export function CompareClient({ items }: { items: Investigation[] }) {
         {[{ label: "Objective", value: (item: Investigation) => item.objective }, { label: "Fuel / sample tags", value: (item: Investigation) => item.fuel_types.join(" · ") }, { label: "Hardware", value: (item: Investigation) => item.hardware.map((entry) => entry.name).join(" · ") || "Not reported" }, { label: "Platform", value: (item: Investigation) => item.flight_platform ?? "Not reported" }, { label: "Reported variables", value: (item: Investigation) => item.reported_variables.join(" ") || "Not structured" }].map((row) => <tr key={row.label}><th>{row.label}</th>{chosen.map((item) => <td key={item.id}>{row.value(item)}</td>)}</tr>)}
         <tr><th>O₂ concentration</th>{chosen.map((item) => <td key={item.id}><ValueBadge field={item.conditions.oxygen_concentration_pct} compact /></td>)}</tr><tr><th>Total pressure</th>{chosen.map((item) => <td key={item.id}><ValueBadge field={item.conditions.total_pressure_psi} compact /></td>)}</tr><tr><th>Airflow</th>{chosen.map((item) => <td key={item.id}><ValueBadge field={item.conditions.airflow_m_s} compact /></td>)}</tr>
       </tbody></table></div>
+      <div className="compare-mobile-list" aria-label="Investigation comparison details">{chosen.map((item) => <article className="compare-mobile-card" key={item.id}>
+        <div className="compare-mobile-heading"><span className="record-id">{item.id}</span><strong>{item.acronym || item.title}</strong><SourceLink href={item.source_url} label="PSI record" /></div>
+        <div className="compare-mobile-line"><span>Objective</span><p>{item.objective || "Not reported in the loaded summary."}</p></div>
+        <div className="compare-mobile-line"><span>Fuel / sample</span><p>{item.fuel_types.join(" · ") || "Not reported"}</p></div>
+        <div className="compare-mobile-line"><span>Hardware</span><p>{item.hardware.map((value) => value.name).join(" · ") || "Not reported"}</p></div>
+        <div className="compare-mobile-line"><span>Platform</span><p>{item.flight_platform || "Not reported"}</p></div>
+        <div className="compare-mobile-line"><span>Reported variables</span><p>{item.reported_variables.join(" · ") || "Not structured in this summary"}</p></div>
+        <div className="compare-mobile-values"><div><span>O₂ concentration</span><ValueBadge field={item.conditions.oxygen_concentration_pct} compact showSource={false} /></div><div><span>Total pressure</span><ValueBadge field={item.conditions.total_pressure_psi} compact showSource={false} /></div><div><span>Airflow</span><ValueBadge field={item.conditions.airflow_m_s} compact showSource={false} /></div></div>
+      </article>)}</div>
       <EFieldTableChart items={chosen} />
       <div className="source-row">{chosen.map((item) => <Link className="button button-quiet" href={`/investigations/${item.id}`} key={item.id}>{item.id} detail <ArrowUpRight size={13} /></Link>)}</div>
     </>}

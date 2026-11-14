@@ -1,0 +1,331 @@
+# NovaForge: Flame in Freefall Dashboard (NASA Space Apps 2026)
+
+You are a senior full-stack engineer. Build a complete, working, demo-ready web dashboard for the NASA Space Apps 2026 challenge "Flame in Freefall: SI-Powered Fire Safety Insights from Microgravity Combustion". Team: NovaForge ("Turning space data into solutions").
+
+## 1. Goal
+NASA has decades of microgravity combustion experiments, but the data in the Physical Sciences Informatics (PSI) repository is hard to find, compare, and interpret. Build an interactive, AI-powered dashboard that SUMMARIZES, RANKS, and INTERPRETS these investigations to deliver fire safety insights for human space exploration: spacecraft, space stations, Moon base, Mars base, and pressurized rovers.
+
+Out of scope: rocket and propellant fire (combustion in rocket engines is effectively independent of gravity).
+
+Target audience: professors, graduate and undergraduate students, aerospace researchers, and aerospace engineers.
+
+## 2. Data sources (cite these in the app)
+Primary data (authoritative source for all experimental data):
+- PSI repository, combustion investigations: https://psi.nasa.gov/physci/repo/search?q=combustion&data_source=psi&data_type=investigation
+
+Reference and context:
+- NASA Combustion Science: https://www.nasa.gov/glenn/glenn-expertise-space-exploration/physical-sciences-program/combustion-science/
+- Researcher's Guide to ISS Combustion Science: https://www.nasa.gov/missions/station/a-researchers-guide-to-combustion-science/
+- ScienceCasts video: https://www.youtube.com/watch?v=W1oXykoz9zg
+- Apollo 1: https://sma.nasa.gov/sma-disciplines/accllp/apollo-1
+- Apollo 13: https://sma.nasa.gov/sma-disciplines/accllp/apollo-13
+- Mir fire: https://www.nasa.gov/history/25-years-ago-fire-aboard-space-station-mir/
+- Earth spinoffs: https://spinoff.nasa.gov/node/9582 , http://spinoff.nasa.gov/node/9407 , https://spinoff.nasa.gov/node/9918
+
+
+
+STEP ZERO, BEFORE WRITING THE APP: inspect the PSI site and check whether it offers an API, JSON endpoint, or bulk export. Fetch what you can and write an ingestion script that normalizes it into structured JSON. Report exactly what was and wasn't accessible.
+
+
+
+## 3. Investigations to cover (minimum)
+
+- Solids flammability: BASS, BASS-II, Saffire-I/II/III (fabrics, plastics)
+
+- Detection: SAME, SAME-R (smoke); DAFT, DAFT-2 (dust, same instrument as SAME)
+
+- Suppression and liquid droplets: FLEX, FLEX-2 (CO2 and helium dilution), CFI (hardware: MDCA in the CIR)
+
+- ACME gaseous-flame experiments (6 total, ACME modular hardware in the CIR), including BRE (materials flammability in still atmospheres as a function of material properties), CFI-G (highest-oxygen microgravity tests, up to 85% O2), and E-FIELD Flames
+
+- MSG / SPICE flow-duct group: BASS, BASS-II, SPICE, SLICE (solid and gaseous fuels, same modular fan-driven flow duct in the Microgravity Science Glovebox)
+
+- Other PSI combustion investigations, ranked lower for fire safety relevance
+
+
+
+## 4. Scientific accuracy rules (non-negotiable)
+
+1. NASA PSI is the authoritative source for experimental data.
+
+2. Never generate synthetic experimental measurements and present them as NASA research.
+
+3. Distinguish four value types: measured, calculated, literature-derived, unavailable. Every numeric field in the schema carries: value, unit, type, source_url. The UI shows the type as a badge. A value missing type or source_url must fail Zod validation and break the build.
+
+4. Oxygen analysis must treat three quantities SEPARATELY: oxygen concentration (%), total pressure (psi), and oxygen partial pressure (calculated = fraction x total pressure). Never assume a higher O2 percentage automatically means higher partial pressure or a specific increase in fire risk. Reference scenarios, shown as calculated values with their inputs:
+
+   - Earth sea level: 21% O2 at 14.7 psi, about 3.1 psi ppO2
+
+   - Moon base (expected, per challenge text): 30% O2 or greater at 10.2 psi or less, about 3.1 psi ppO2 at those exact numbers
+
+   - Spacesuit: 100% O2 at 4.3 psi, 4.3 psi ppO2
+
+   The challenge text says the Moon-base O2 concentration is more than 40% higher than Earth's; present that as a concentration comparison only.
+
+5. Every numerical experimental value has a traceable source reference (URL, plus investigation ID and record where available).
+
+6. The ranking must distinguish experimental evidence from inferred relevance (see section 6).
+
+7. Never describe an investigation as proving a material is safe unless the experimental evidence supports that conclusion.
+
+8. Verify claims about lunar gravity, Mars gravity, LUCI, FM2, and E-FIELD Flames against NASA documentation. Known from the challenge text: PSI currently has NO partial-gravity combustion data; LUCI and FM2 are expected to add it; E-FIELD Flames mimics partial gravity via electric-field effects on flame ions; microgravity and normal-gravity results could bound intermediate gravity levels.
+
+9. If NASA data is unavailable, identify the missing information explicitly instead of generating replacement values.
+
+10. Test the AI assistant with questions whose answers are both available and unavailable in the dataset, and document them in TESTING.md.
+
+
+
+## 5. Core features
+
+1. Environment-aware ranking. User picks an environment (ISS, spacecraft cabin, Moon base, Mars base, pressurized rover, spacesuit); ranked list with a visible score breakdown. Include a "Moon Base" preset.
+
+2. Investigation explorer. Search and filter by fuel type (solid, gas, liquid droplet), fuel shape and size, O2 concentration, total pressure, airflow speed, hardware, safety category (prevention, detection, suppression), and sensors. Each card shows objectives, fuels, test conditions, variables (what differed vs. stayed the same across tests), measurements, and a source link.
+
+3. Side-by-side comparison of 2 to 4 investigations: similarities, differences, shared hardware, condition ranges, and a chart.
+
+4. Visualizations: condition coverage (O2 % vs. airflow, and ppO2 vs. total pressure with Earth, Moon-base, and spacesuit reference points), a hardware-sharing diagram, a timeline.
+
+5. Predictive-modeling export: CSV and JSON of the actual loaded dataset, with a documented schema and source URLs.
+
+6. Next-gen safety equipment view: detection (SAME, DAFT), suppression (FLEX), materials selection (BASS, Saffire).
+
+7. Earth applications panel: water-mist extinguishers, smoke vs. dust discriminating detectors, firefighter air tanks and protective clothing, linking to the NASA spinoff pages.
+
+8. Data gaps panel: partial gravity, missing fields per investigation, and anything unverified.
+
+
+
+## 6. Ranking methodology
+
+Show TWO separate scores for each investigation, never blended into one number:
+
+- Evidence score: how directly the investigation's actual tested conditions match the selected environment (O2 %, total pressure, ppO2, airflow, fuel and material type, relevance to prevention, detection, or suppression). Based only on recorded data.
+
+- Inferred relevance score: how likely the findings apply to the environment based on reasoning (e.g., related hardware or fuel class). Always labeled "inferred".
+
+Weights are editable and documented in /methodology. Show the breakdown and the data fields behind each score.
+
+
+
+## 7. AI ("SI") layer
+
+- LLM assistant that (a) writes plain-language summaries per investigation, (b) explains rankings, (c) answers questions such as "Which tests are most relevant to a 30% O2 lunar habitat?", (d) compares investigations.
+
+- Retrieval-augmented: retrieve relevant records first and pass ONLY those to the model. The model may answer only from them, must cite which investigations and records it used, and must say when the data does not support an answer. It must not invent flammability values or safety claims.
+
+- Provider-agnostic wrapper (Anthropic or OpenAI SDK, chosen via env var). Key read from an environment variable, server-side only.
+
+- Demo mode: may only replay AI answers previously generated from the real loaded dataset. Every response is visibly badged "DEMO (cached)" or "LIVE", and the API returns a mode flag.
+
+- Audience toggle: Student (plain language) vs. Researcher/Engineer (technical detail, units).
+
+- Rate-limit /api/ask and keep responses short or streamed.
+
+
+
+## 8. Tech stack
+
+- Next.js 14+ (App Router), TypeScript (strict), Tailwind CSS, shadcn/ui
+
+- Recharts (or Plotly for coverage plots), TanStack Table, Fuse.js for search
+
+- Zod schemas shared by the ingestion script and the app
+
+- Vitest for unit tests, one Playwright smoke test
+
+- Ingestion: Node/TypeScript script run with `npm run ingest`
+
+- npm; deploy to Vercel
+
+- Backend = Next.js API routes in the same repo. No database: normalized static JSON in /data/normalized, committed to the repo. Only add a separate Python service if PSI parsing proves too heavy, and say so if that happens.
+
+
+
+## 9. Pages and routes
+
+- `/`                      Landing: challenge summary, environment picker, Moon Base preset
+
+- `/dashboard`             Ranked investigations for the chosen environment
+
+- `/investigations`        Explorer with search and filters
+
+- `/investigations/[id]`   Detail: objectives, fuels, conditions, variables, sensors, sources
+
+- `/compare`               Side-by-side comparison
+
+- `/assistant`             Grounded AI chat
+
+- `/safety-tech`           Detection, suppression, materials research
+
+- `/earth-applications`    NASA spinoffs
+
+- `/data-gaps`             Missing data, including partial gravity
+
+- `/methodology`           Ranking, value types, limitations, full source list
+
+- `/api/investigations`    Loaded dataset
+
+- `/api/rank`              Ranking for a given environment
+
+- `/api/ask`               AI route (RAG, rate limited, returns live/demo flag)
+
+- `/api/export`            CSV/JSON export of the actual loaded dataset
+
+
+
+## 10. Folder structure
+
+```
+
+/app                 pages and API routes
+
+/components          cards, charts, badges, filters, chat
+
+/lib
+
+  /ranking           evidence score + inferred relevance score
+
+  /ai                provider wrapper, retrieval, prompts, demo cache
+
+  /schema            Zod schemas and types
+
+  /units             ppO2 calculation and unit conversions
+
+/data
+
+  /raw               fetched PSI/NASA source material
+
+  /normalized        cleaned investigations JSON
+
+/scripts             ingestion and validation
+
+/tests               Vitest tests
+
+TESTING.md           AI test questions (answerable and unanswerable)
+
+README.md
+
+.env.example
+
+```
+
+
+
+## 11. UX and quality
+
+- Dark mission-control look, responsive, keyboard accessible, loading and error states
+
+- Tooltips for jargon: diffusion flame, flammability limit, ppO2, MDCA, CIR, MSG
+
+- Footer disclaimer: educational research tool, NOT a certified safety system; NASA non-endorsement note; full source list
+
+- Lighthouse accessibility 90 or higher, ## 11b. Visual design system
+
+Theme: dark "mission control" aesthetic. Deep space background, fire-orange as the primary accent, cool blue as the secondary. Clean, data-dense, serious. No gimmicky space clip-art.
+
+### Color tokens (define as CSS variables / Tailwind theme)
+Backgrounds and surfaces
+- --bg:            #070B14   (deep space, page background)
+- --surface:       #0E1626   (cards, panels)
+- --surface-2:     #16213A   (hover states, nested panels)
+- --border:        #24304D
+
+Text
+- --text:          #E8EEF9   (primary)
+- --text-muted:    #9AA7C2   (secondary)
+
+Brand accents
+- --flame:         #FF6B2C   (primary accent: buttons, active states, key highlights)
+- --flame-glow:    #FFB347   (gradient partner, charts highlight)
+- --ice:           #4CC9F0   (secondary accent: links, info, microgravity references)
+
+Value-type badges (must be consistent everywhere)
+- Measured:           #2EC4B6  (teal)
+- Calculated:         #4CC9F0  (blue)
+- Literature-derived: #A78BFA  (violet)
+- Unavailable:        #6B7691  (grey, dashed outline)
+
+Status and safety
+- Success:  #3DDC97
+- Warning:  #FFC857
+- Danger:   #FF4D4D
+
+Score colors
+- Evidence score:           flame orange (#FF6B2C)
+- Inferred relevance score: ice blue (#4CC9F0), always labeled "inferred"
+
+Environment reference points (charts)
+- Earth sea level: #9AA7C2 | Moon base: #FFB347 | Spacesuit: #FF4D4D
+
+### Typography
+- Headings: "Space Grotesk" (Google Font via next/font)
+- Body and UI: "Inter"
+- Numbers, units, IDs, code: "JetBrains Mono"
+- Scale: 14/16 px body, 20/24/32/48 px headings. Tabular numerals for all data.
+
+### Look and feel
+- Rounded-xl cards, 1px --border, subtle shadow; no heavy gradients.
+- Use a soft flame-colored glow only on the primary CTA and the top-ranked investigation card.
+- Hero: dark background with a subtle animated blue-sphere flame motif (CSS/SVG only, respects prefers-reduced-motion).
+- Charts: dark backgrounds, muted gridlines, flame and ice as the main series colors, always with axis labels and units.
+- Icons: lucide-react, 1.5px stroke.
+- Layout: left sidebar nav on desktop, bottom or collapsible nav on mobile; max content width ~1280px.
+
+### Accessibility
+- Text contrast at least 4.5:1 against its background (verify --text-muted on --surface).
+- Never rely on color alone: value-type badges also carry a text label and an icon; chart series also differ by line style or marker.
+- Visible focus rings (2px --ice), full keyboard navigation.
+- Respect prefers-reduced-motion and prefers-color-scheme (dark is default; no light mode needed for MVP).
+
+### Implementation
+- Put all tokens in tailwind.config.ts and globals.css so the palette can be changed in one place.
+- Build shared components for: ValueBadge, SourceLink, ScoreBar, InvestigationCard, ChartCard. Every number in the app renders through ValueBadge + SourceLink so the accuracy rules are enforced visually.
+
+
+
+## 12. Implementation rules
+
+- Complete each stage before moving to the next, and keep a working app throughout.
+
+- Reuse existing files and components where possible.
+
+- Do not replace actual NASA data with hardcoded demonstration data. A seed dataset is allowed ONLY if transcribed from the cited NASA pages with a source URL on every value, and it must be labeled "manually transcribed, not live PSI data". It must never contain invented values.
+
+- Add automated tests for: data normalization, ranking calculations, ppO2 calculations, source attribution (every number has type and source_url), and schema validation.
+
+- Verify that CSV and JSON exports contain the actual loaded dataset (test that exported records match /api/investigations).
+
+- Run `npm run build` and `npm test`, and fix all errors before declaring the project complete.
+
+
+
+## 13. Deployment (Vercel)
+
+- Provide `.env.example` (provider, API key, rate-limit settings) and README deploy steps: push to GitHub, import into Vercel, set env vars, deploy.
+
+- Never commit secrets. Add a spending-safe default: demo mode on when no API key is set.
+
+
+
+## 14. Stages
+
+1. Inspect data sources and report what is accessible
+
+2. Define the schema (with value types and source references)
+
+3. Build the ingestion and normalized dataset
+
+4. Build ranking logic and ppO2 utilities, with tests
+
+5. Build the UI and pages
+
+6. Build the AI layer, with the available and unavailable question tests
+
+7. Polish, run tests and the production build, then write the README, methodology doc, TESTING.md, and a 3-minute DEMO_SCRIPT.md built around the Moon Base scenario
+
+
+
+## 15. Final deliverables
+
+Working app, ingestion script and dataset, README, methodology doc, TESTING.md, DEMO_SCRIPT.md, and a list of anything you could not verify or access.
